@@ -1,44 +1,26 @@
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
-
-# Sets the minimum version of CMake required to build the native library.
-
 cmake_minimum_required(VERSION 3.4.1)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
+# 查找文件系统中制定模式的路径，如：/*是匹配根目录下的所有文件
+file(GLOB bzip_source ${CMAKE_SOURCE_DIR}/bzip/*.c)
 
-add_library( # Sets the name of the library.
-             native-lib
+# 设置本地动态库，编译生成动态库
+add_library(
+        native-lib # 模块名
 
-             # Sets the library as a shared library.
-             SHARED
+        SHARED # 动态库、分享库
 
-             # Provides a relative path to your source file(s).
-             native-lib.cpp )
+        native-lib.cpp
+        bspatch.c
+        ${bzip_source}) # 源文件
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
+# 查找系统库，日志输出库Log
+find_library(
+        log-lib
 
-find_library( # Sets the name of the path variable.
-              log-lib
+        log)
 
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
+# 需要链接或者编译的库
+target_link_libraries(
+        native-lib
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
-
-target_link_libraries( # Specifies the target library.
-                       native-lib
-
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
+        ${log-lib})
