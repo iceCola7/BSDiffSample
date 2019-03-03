@@ -11,9 +11,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags ""
+                cppFlags ""  // 配置c++的版本库，其中""表示使用默认的，如 cppFlags "-std=c++14" 为c++14版本
                 // 兼容CPU架构
-                abiFilters 'armeabi-v7a' //
+                abiFilters 'armeabi-v7a' // 输出指定abi体系结构下的so库
             }
         }
     }

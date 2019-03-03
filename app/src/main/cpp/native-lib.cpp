@@ -7,7 +7,7 @@ extern int p_main(int argc, const char *argv[]);
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_cxz_bsdiff_sample_MainActivity_bsPath(JNIEnv *env, jobject instance, jstring oldApk_,
+Java_com_cxz_bsdiff_sample_MainActivity_bsPatch(JNIEnv *env, jobject instance, jstring oldApk_,
                                                jstring patch_, jstring output_) {
 
     // 将Java字符串转为C/C++的字符串，转换为UTF-8格式的char指针

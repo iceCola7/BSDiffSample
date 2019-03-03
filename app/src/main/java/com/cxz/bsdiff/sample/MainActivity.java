@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
      * @param patch  差分包，Patch文件
      * @param output 合成后新版本apk的输出路径
      */
-    public native void bsPath(String oldApk, String patch, String output);
+    public native void bsPatch(String oldApk, String patch, String output);
 
     public void update(View view) {
         // 从服务器下载 patch 到用户手机， SDCard 里面
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("oldApk---->>",oldApk);
                 Log.e("patch---->>",patch);
                 Log.e("output---->>",output);
-                bsPath(oldApk, patch, output);
+                bsPatch(oldApk, patch, output);
                 return new File(output);
             }
 
