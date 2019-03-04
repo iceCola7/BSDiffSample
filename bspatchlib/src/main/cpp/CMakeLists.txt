@@ -5,11 +5,11 @@ file(GLOB bzip_source ${CMAKE_SOURCE_DIR}/bzip/*.c)
 
 # 设置本地动态库，编译生成动态库
 add_library(
-        native-lib # 模块名
+        bspatcher # 模块名
 
         SHARED # 动态库、分享库
 
-        native-lib.cpp
+        bspatcher.cpp
         bspatch.c
         ${bzip_source}) # 源文件
 
@@ -21,6 +21,6 @@ find_library(
 
 # 需要链接或者编译的库
 target_link_libraries(
-        native-lib
+        bspatcher
 
         ${log-lib})
