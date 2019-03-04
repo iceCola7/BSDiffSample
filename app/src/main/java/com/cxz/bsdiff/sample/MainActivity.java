@@ -10,18 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cxz.bsdiff.sample.utils.UriParseUtils;
+import com.cxz.bspatchlib.BsPatcher;
 
 import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-
-    // 用于在应用程序启动时，加载本地的lib库
-    static {
-        System.loadLibrary("native-lib");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * 合成安装包
-     *
-     * @param oldApk 旧版本安装包，如1.1.1版本
-     * @param patch  差分包，Patch文件
-     * @param output 合成后新版本apk的输出路径
-     */
-    public native void bsPatch(String oldApk, String patch, String output);
-
     public void update(View view) {
         // 从服务器下载 patch 到用户手机， SDCard 里面
         new AsyncTask<Void, Void, File>() {
@@ -59,10 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 String oldApk = getApplicationInfo().sourceDir;
                 String patch = new File(Environment.getExternalStorageDirectory(), "patch").getAbsolutePath();
                 String output = createNewApk().getAbsolutePath();
-                Log.e("oldApk---->>",oldApk);
-                Log.e("patch---->>",patch);
-                Log.e("output---->>",output);
-                bsPatch(oldApk, patch, output);
+                Log.e("oldApk---->>", oldApk);
+                Log.e("patch----->>", patch);
+                Log.e("output---->>", output);
+                if (!new File(patch).exists()) {
+                    return null;
+                }
+                BsPatcher.bsPatch(oldApk, patch, output);
                 return new File(output);
             }
 
@@ -70,7 +61,11 @@ public class MainActivity extends AppCompatActivity {
             protected void onPostExecute(File file) {
                 super.onPostExecute(file);
                 // 已经合成了，调用该方法，安装新版本apk
-                UriParseUtils.installApk(MainActivity.this, file);
+                if (file != null) {
+                    UriParseUtils.installApk(MainActivity.this, file);
+                } else {
+                    Toast.makeText(MainActivity.this, "差分包不存在！", Toast.LENGTH_LONG).show();
+                }
             }
         }.execute();
     }
