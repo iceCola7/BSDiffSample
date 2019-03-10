@@ -7,14 +7,12 @@ extern int p_main(int argc, const char *argv[]);
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_cxz_bsdiff_sample_MainActivity_bsPatch(JNIEnv *env, jobject instance, jstring oldApk_,
-                                               jstring patch_, jstring output_) {
-
+Java_com_cxz_bspatchlib_BsPatcher_bsPatch(JNIEnv *env, jobject instance, jstring oldApk_,
+                                          jstring patch_, jstring output_) {
     // 将Java字符串转为C/C++的字符串，转换为UTF-8格式的char指针
     const char *oldApk = env->GetStringUTFChars(oldApk_, 0);
     const char *patch = env->GetStringUTFChars(patch_, 0);
     const char *output = env->GetStringUTFChars(output_, 0);
-
 
     // bspatch, oldfile, newfile, patchfile
     const char *argv[] = {"", oldApk, output, patch};
